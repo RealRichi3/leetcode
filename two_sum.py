@@ -1,52 +1,53 @@
 import time
 start = time.time()
 
-def check
-def twoSum(mainNums, target):
-    sortedNums = mainNums.copy()
-    sortedNums.sort()
-    count = 0
-    ans = []
-    mainAns = []
-
-    while count < len(sortedNums) - 1:
-        first = sortedNums[count]
-        second = sortedNums[count + 1]
+class Solution:
+    def __init__(self, mainNums=0, target=0):
+        self.mainNums = mainNums
+        self.target = target
         
-        if first + second == target:
-            ans.append(sortedNums.index(first))
-            sortedNums[count] = str(first)
-            ans.append(sortedNums.index(second))
-            sortedNums[count] = int(first)
+    def checkMainList(self, args):
+        '''
+            Accounts for when the first and second number are the same integers
+            but different index in the given list
+        '''
+        ans, nums, firstItem, secondItem = args
 
-            mainAns.append(mainNums.index(first))
-            mainNums[mainNums.index(first)] = ''
-            mainAns.append(mainNums.index(second))
+        ans.append(nums.index(firstItem))
+        nums[nums.index(firstItem)] = str(firstItem)
+        ans.append(nums.index(secondItem))
 
-            return mainAns
+        return ans
+    
+    def twoSum(self, mainNums, target):
+        sortedNums = mainNums.copy()
+        sortedNums.sort()
+        mainAns = []
+        count = 0
         
-        newCount = count
-        copyFirst = first
-        while (copyFirst + second > target) &  (newCount > 0):
-            preFirst = sortedNums[newCount - 1]
-
-            if second + preFirst == target:
-                ans.append(sortedNums.index(preFirst))
-                sortedNums[newCount - 1] = str(preFirst)
-                ans.append(sortedNums.index(second))
-                sortedNums[newCount - 1] = int(preFirst)
-
-                mainAns.append(mainNums.index(preFirst))
-                mainNums[mainNums.index(preFirst)] = ''
-                mainAns.append(mainNums.index(second))
-
+        while count < len(sortedNums) - 1:
+            first = sortedNums[count]
+            second = sortedNums[count + 1]
+            if first + second == target:
+                mainAns = self.checkMainList([mainAns, mainNums, first, second])
                 return mainAns
 
-            newCount -= 1
+            newCount = count
             copyFirst = first
-        count += 1
+            while (copyFirst + second > target) &  (newCount > 0):
+                preFirst = sortedNums[newCount - 1]
+                if second + preFirst == target:
+                    mainAns = self.checkMainList([mainAns, mainNums, preFirst, second])
+                    return mainAns
+
+                newCount -= 1
+                copyFirst = first
+
+            count += 1
+            
+    
 
 
 
-print(twoSum([3,2,3], 6))
+print(Solution().twoSum(list(range(0, 10001)), 19999))
 print(time.time() - start)
